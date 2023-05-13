@@ -12,5 +12,24 @@ services:
     command: python3 -u main.py
     volumes:
       - ./:/face_recognition
+      - ../muskia/uploads:/uploads
     #Uncomment this line to run the example on the GPU (requires Nvidia-Docker)
     # runtime: nvidia
+
+  image-uploader:
+    build:
+      context: ../muskia
+      dockerfile: Dockerfile
+    image:
+      muskia:latest
+    ports:
+      - "127.0.0.1:5002:5002"
+    environment:
+      HOST: 0.0.0.0
+    depends_on:
+      - face_recognition
+    volumes:
+      - ../muskia/uploads:/uploads
+
+
+
