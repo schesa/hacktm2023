@@ -1,8 +1,7 @@
-test_data/*
-train_data/*
-
-!test_data/Chesa Sebastian.jpeg
-!train_data/Chesa Sebastian.jpeg
+#test_data/*
+#train_data/*
+#!test_data/Chesa Sebastian.jpeg
+#!train_data/Chesa Sebastian.jpeg
 
 .*
 

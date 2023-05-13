@@ -49,9 +49,9 @@ else:
 
 pil_image = Image.fromarray(unknown_picture)
 draw = ImageDraw.Draw(pil_image)
-matching_name = "Unkown"
 
-for unknown_face_encoding in unknown_face_encodings:
+for i, unknown_face_encoding in enumerate(unknown_face_encodings):
+    matching_name = "Unkown"
     for file, encoding in cache_encodings.items():
         results = face_recognition.compare_faces([encoding], unknown_face_encoding)
         if results[0] == True:
@@ -65,29 +65,34 @@ for unknown_face_encoding in unknown_face_encodings:
     # Create a Pillow ImageDraw Draw instance to draw with
 
     # Loop through each face found in the unknown image
-    for (top, right, bottom, left), face_encoding in zip(unknown_face_locations, unknown_face_encodings):
-        # See if the face is a match for the known face(s)
-        # matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
+    print(type(unknown_face_locations))
+    print(unknown_face_locations)
+    print(i)
 
-        # If a match was found in known_face_encodings, just use the first one.
-        # if True in matches:
-        #     first_match_index = matches.index(True)
-        #     name = known_face_names[first_match_index]
+    (top, right, bottom, left) = unknown_face_locations[i]
+    # See if the face is a match for the known face(s)
+    # matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
 
-        # Or instead, use the known face with the smallest distance to the new face
-        # face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
-        # best_match_index = np.argmin(face_distances)
-        # if matches[best_match_index]:
-        #     name = known_face_names[best_match_index]
+    # If a match was found in known_face_encodings, just use the first one.
+    # if True in matches:
+    #     first_match_index = matches.index(True)
+    #     name = known_face_names[first_match_index]
 
-        # Draw a box around the face using the Pillow module
-        draw.rectangle(((left, top), (right, bottom)), outline=(0, 0, 255))
+    # Or instead, use the known face with the smallest distance to the new face
+    # face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
+    # best_match_index = np.argmin(face_distances)
+    # if matches[best_match_index]:
+    #     name = known_face_names[best_match_index]
 
-        # Draw a label with a name below the face
-        print(f'matching name: {matching_name}')
-        text_width, text_height = draw.textsize(matching_name)
-        draw.rectangle(((left, bottom - text_height - 10), (right, bottom)), fill=(0, 0, 255), outline=(0, 0, 255))
-        draw.text((left + 6, bottom - text_height - 5), matching_name, fill=(255, 255, 255, 255))
+    # Draw a box around the face using the Pillow module
+    draw.rectangle(((left, top), (right, bottom)), outline=(0, 0, 255))
+
+    # Draw a label with a name below the face
+    print(f'matching name: {matching_name}')
+    text_width, text_height = draw.textsize(matching_name)
+    draw.rectangle(((left, bottom - text_height - 10), (right, bottom)), fill=(0, 0, 255), outline=(0, 0, 255))
+    draw.text((left + 6, bottom - text_height - 5), matching_name, fill=(255, 255, 255, 255))
+    # pil_image.save(f'./result{matching_name}.jpeg', 'JPEG')
 
 
 # Remove the drawing library from memory as per the Pillow docs
