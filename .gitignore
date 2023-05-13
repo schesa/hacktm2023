@@ -5,3 +5,5 @@ train_data/*
 !train_data/Chesa Sebastian.jpeg
 
 .*
+
+*/__pycache__/*

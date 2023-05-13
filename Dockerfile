@@ -41,12 +41,13 @@ RUN cd ~ && \
 #     pip3 install -r requirements.txt
 # RUN whatever_command_you_run_to_start_your_app
 
-COPY . /root/face_recognition
-RUN cd /root/face_recognition && \
-    pip3 install -r requirements.txt && \
-    python3 setup.py install
+ COPY . /root/face_recognition
+ RUN cd /root/face_recognition && \
+     pip3 install -r requirements.txt
+ #     python3 setup.py install
 
 # Add pip3 install opencv-python==4.1.2.30 if you want to run the live webcam examples
 
-CMD cd /root/face_recognition/examples && \
-    python3 recognize_faces_in_pictures.py
+# CMD cd /root/face_recognition/examples && \
+#     python3 recognize_faces_in_pictures.py
+CMD ["/bin/bash"]
