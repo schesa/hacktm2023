@@ -23,7 +23,7 @@ services:
     image:
       muskia:latest
     ports:
-      - "127.0.0.1:5002:5002"
+      - "5002:5002"
     environment:
       HOST: 0.0.0.0
     depends_on:

@@ -60,17 +60,18 @@ else:
     load_train()
 
 
-def process_image(unknown_picture,  unknown_face_locations, unknown_face_encodings, result_file, extension):
+def process_image(unknown_picture,  unknown_face_locations, unknown_face_encodings, result_file, extension, result_names_file):
     pil_image = Image.fromarray(unknown_picture)
     draw = ImageDraw.Draw(pil_image)
 
+    matching_name_arr = []
     for i, unknown_face_encoding in enumerate(unknown_face_encodings):
-        matching_name = "Unkown"
         for file, encoding in cache_encodings.items():
             results = face_recognition.compare_faces([encoding], unknown_face_encoding)
             if results[0] == True:
                 print(f'Face matching with {file}')
                 matching_name = Path(file).stem
+                matching_name_arr.append(matching_name)
                 break
             else:
                 print(f'Face not matching for {file}')
@@ -82,6 +83,14 @@ def process_image(unknown_picture,  unknown_face_locations, unknown_face_encodin
         print(type(unknown_face_locations))
         print(unknown_face_locations)
         print(i)
+
+        if matching_name_arr:
+            try:
+              with open(result_names_file, 'w') as f:
+                for item in matching_name_arr:
+                  f.write("%s\n" % item)
+            except IOError as e:
+              print(f"An error occurred while writing to the file: {e}")
 
         (top, right, bottom, left) = unknown_face_locations[i]
         # See if the face is a match for the known face(s)
@@ -150,12 +159,13 @@ def scan_directory(directory):
                 os.makedirs(processed_dir)
                 file_extension = get_file_extension(file_name)
                 result_file_name = f"{processed_dir}/result.{file_extension}"
+                restult_names_file_name = f"{processed_dir}/names.txt"
 
                 unknown_picture = face_recognition.load_image_file(f"/uploads/{d}/{file_name}")
                 unknown_face_encodings = face_recognition.face_encodings(unknown_picture)
                 unknown_face_locations = face_recognition.face_locations(unknown_picture)
 
-                process_image(unknown_picture, unknown_face_locations, unknown_face_encodings, result_file_name, file_extension)
+                process_image(unknown_picture, unknown_face_locations, unknown_face_encodings, result_file_name, file_extension, restult_names_file_name)
 
                 # Update the last processed directory number and file name
                 last_processed_number = d
